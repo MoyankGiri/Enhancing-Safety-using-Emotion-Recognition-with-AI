@@ -43,4 +43,3 @@ Filename identifiers
 - 1st Repetition (01)
 - 12th Actor (12)
 - Female, as the actor ID number is even.
-```
