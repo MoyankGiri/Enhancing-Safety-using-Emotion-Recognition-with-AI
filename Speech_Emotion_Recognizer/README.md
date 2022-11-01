@@ -6,16 +6,18 @@ This project presents a deep learning classifier able to predict the emotions of
 
 **Steps to Run**
 
-- First, ensure keras, librosa and numpy are installed on your system.
+- First, ensure keras, librosa, numpy, pyaudio, playsound, sounddevice, wavio, speechrecognition, pyttsx3 packages are installed on your system.
 - The data files are available in the RAVDESS+TESS_Dataset folder. To interpret the file names, look at the section below.
 - The features have been extracted and saved in the joblib_features folder. Features can be extracted through create_features.py file (Optional)
 - The trained model has been saved in the model folder. Training can be done through the neural_network.py file, in this case all requirements from requirements.txt must be installed (Optional)
-- Any audio .wav file can be converted to a form more suitable for Librosa via the convert_wavs.py file. Pass your audio .wav file to this python file. Note that FFMpeg library must be installed for this. (Optional)
+- You can record audio for any duration using the recordaudio.py file, the frequency is kept at 48kHz
+- No speech in the audio signal is detected using the speech_text_translation.py file
 - MP4 files can be converted to .wav file through Mp4ToWav.py 
 - Model summary, confusion matrix and other metrics are saved in the media folder
-- Either choose an audio file from the dataset folder or any audio file of your choice and place it in the examples folder.
+- Either choose an audio file from the dataset folder, or any audio file of your choice, or record audio yourself and place it in the examples folder.
 - Change AUDIO_FILE in the live_predictions.py folder to the name of your audio file and simply execute live_predictions.py
-- The output displayed is the predicted emotion.
+- The output displayed is the predicted emotion / probability of each emotion
+- Alternatively, you can use the streaming.py file to simultaneously record audio and give live predictions by changing the number_of_times variable inside the file
 
 **RAVDESS File Naming Convention**
 
