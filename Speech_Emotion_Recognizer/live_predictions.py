@@ -7,7 +7,7 @@ import librosa
 import numpy as np
 from playsound import playsound
 
-from legacy_code import stt
+import speech_text_translation as stt
 from config import EXAMPLES_PATH
 from config import MODEL_DIR_PATH
 from config import ALERTS_PATH

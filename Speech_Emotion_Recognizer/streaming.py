@@ -8,7 +8,7 @@ import keras
 import librosa
 import numpy as np
 from playsound import playsound
-from legacy_code import stt
+import speech_text_translation as stt
 import sounddevice as sd
 import wavio as wv
 
@@ -91,7 +91,7 @@ def takeAudio():
     # Recording duration
     duration = 5
 
-    number_of_times = 1
+    number_of_times = 1 #number of times you want to record audio and get prediction
     
     # Start recorder with the given values 
     # of duration and sample frequency
