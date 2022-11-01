@@ -24,9 +24,11 @@ if sys.platform.startswith('win32'):
     MODEL_DIR_PATH = str(working_dir_path) + '\\model\\'
     TESS_ORIGINAL_FOLDER_PATH = str(working_dir_path) + '\\TESS_Speech_Data\\'
     EXAMPLES_PATH = str(working_dir_path) + '\\examples\\'
+    ALERTS_PATH = str(working_dir_path) + '\\alerts\\'
 else:
     TRAINING_FILES_PATH = str(working_dir_path) + '/RAVDESS+TESS_Dataset/'
     SAVE_DIR_PATH = str(working_dir_path) + '/joblib_features/'
     MODEL_DIR_PATH = str(working_dir_path) + '/model/'
     TESS_ORIGINAL_FOLDER_PATH = str(working_dir_path) + '/TESS_Speech_Data/'
     EXAMPLES_PATH = str(working_dir_path) + '/examples/'
+    ALERTS_PATH = str(working_dir_path) + '/alerts/'
