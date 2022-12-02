@@ -1,5 +1,5 @@
 import speech_recognition as sr
-import pyttsx3
+#import pyttsx3
 
 def convert(sourceFile):
     # Initialize recognizer class (for recognizing the speech)
