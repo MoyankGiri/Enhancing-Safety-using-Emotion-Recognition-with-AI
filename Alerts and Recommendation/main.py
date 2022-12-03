@@ -31,7 +31,7 @@ def my_form():
 def moodtape():
 	mood = request.form['text']
 	#username = request.form['username']
-	mood = float(mood)
+	#mood = float(mood)
 	#token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
 	spotify_auth = authenticate_spotify(token)
 	top_artists = aggregate_top_artists(spotify_auth)

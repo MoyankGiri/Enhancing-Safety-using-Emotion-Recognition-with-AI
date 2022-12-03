@@ -12,7 +12,7 @@ scope = 'user-library-read user-top-read playlist-modify-public user-follow-read
 
 if len(sys.argv) > 1:
     username = sys.argv[1]
-    mood = float(sys.argv[2])
+    mood = sys.argv[2]
 else:
     print("Usage: %s username" % (sys.argv[0],))
     sys.exit()
@@ -71,48 +71,53 @@ if token:
 		
 		print("...selecting tracks")
 		selected_tracks_uri = []
-
 		def group(seq, size):
 			return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
+		emo = {"Happy":1.0 , "Surprised":0.7,"Sad":0.05,"Angry":0.3,"Disgust":0.2,"Neutral":0.5,"Fear":0.8}
 		random.shuffle(top_tracks_uri)
 		for tracks in list(group(top_tracks_uri, 50)):
 			tracks_all_data = sp.audio_features(tracks)
 			for track_data in tracks_all_data:
 				try:
-					if mood < 0.10:
-						if (0 <= track_data["valence"] <= (mood + 0.15)
-						and track_data["danceability"] <= (mood*8)
-						and track_data["energy"] <= (mood*10)):
+					if mood=="Sad" :
+						if (0 <= track_data["valence"] <= (emo["Sad"] + 0.15)
+						and track_data["danceability"] <= (emo["Sad"]*8)
+						and track_data["energy"] <= (emo["Sad"]*10)):
 							selected_tracks_uri.append(track_data["uri"])					
-					elif 0.10 <= mood < 0.25:						
-						if ((mood - 0.075) <= track_data["valence"] <= (mood + 0.075)
-						and track_data["danceability"] <= (mood*4)
-						and track_data["energy"] <= (mood*5)):
+					elif mood=="Disgust":						
+						if (( emo["Disgust"] - 0.075) <= track_data["valence"] <= ( emo["Disgust"]+ 0.075)
+						and track_data["danceability"] <= (emo["Disgust"]*4)
+						and track_data["energy"] <= (emo["Disgust"]*5)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif 0.25 <= mood < 0.50:						
-						if ((mood - 0.05) <= track_data["valence"] <= (mood + 0.05)
-						and track_data["danceability"] <= (mood*1.75)
-						and track_data["energy"] <= (mood*1.75)):
+					elif mood=="Angry":						
+						if ((emo["Angry"] - 0.075) <= track_data["valence"] <= ( emo["Angry"]+ 0.075)
+						and track_data["danceability"] <= (emo["Angry"]*3)
+						and track_data["energy"] <= (emo["Angry"]*4)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif 0.50 <= mood < 0.75:						
-						if ((mood - 0.075) <= track_data["valence"] <= (mood + 0.075)
-						and track_data["danceability"] >= (mood/2.5)
-						and track_data["energy"] >= (mood/2)):
+					elif mood=="Neutral":						
+						if ((emo["Neutral"] - 0.05) <= track_data["valence"] <= (emo["Neutral"] + 0.05)
+						and track_data["danceability"] <= (emo["Neutral"]*1.75)
+						and track_data["energy"] <= (emo["Neutral"]*1.75)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif 0.75 <= mood < 0.90:						
-						if ((mood - 0.075) <= track_data["valence"] <= (mood + 0.075)
-						and track_data["danceability"] >= (mood/2)
-						and track_data["energy"] >= (mood/1.75)):
+					elif mood=="Surprised":						
+						if ((emo["Surprised"] - 0.075) <= track_data["valence"] <= (emo["Surprised"] + 0.075)
+						and track_data["danceability"] >= (emo["Surprised"]/2.5)
+						and track_data["energy"] >= (emo["Surprised"]/2)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif mood >= 0.90:
-						if ((mood - 0.15) <= track_data["valence"] <= 1
-						and track_data["danceability"] >= (mood/1.75)
-						and track_data["energy"] >= (mood/1.5)):
+					elif mood=="Fear":						
+						if ((emo["Fear"] - 0.075) <= track_data["valence"] <= (emo["Fear"] + 0.075)
+						and track_data["danceability"] >= (emo["Fear"]/2)
+						and track_data["energy"] >= (emo["Fear"]/1.75)):
+							selected_tracks_uri.append(track_data["uri"])
+					elif mood=="Happy":
+						if ((emo["Happy"] - 0.15) <= track_data["valence"] <= 1
+						and track_data["danceability"] >= (emo["Happy"]/1.75)
+						and track_data["energy"] >= (emo["Happy"]/1.5)):
 							selected_tracks_uri.append(track_data["uri"])
 				except TypeError as te:
 					continue
-
+	
 		return selected_tracks_uri			
 
 	# Step 5. From these tracks, create a playlist for user
@@ -123,9 +128,9 @@ if token:
 		user_all_data = sp.current_user()
 		user_id = user_all_data["id"]
 
-		playlist_all_data = sp.user_playlist_create(user_id, "mood " + str(mood))
+		playlist_all_data = sp.user_playlist_create(user_id,"You feel : "+ mood )
 		playlist_id = playlist_all_data["id"]
-
+		#print(selected_tracks_uri)
 		random.shuffle(selected_tracks_uri)
 		sp.user_playlist_add_tracks(user_id, playlist_id, selected_tracks_uri[0:30])
 
