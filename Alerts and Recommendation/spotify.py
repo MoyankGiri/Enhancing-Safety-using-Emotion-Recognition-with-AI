@@ -74,46 +74,46 @@ if token:
 		def group(seq, size):
 			return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
-		emo = {"Happy":1.0 , "Surprised":0.7,"Sad":0.05,"Angry":0.3,"Disgust":0.2,"Neutral":0.5,"Fear":0.8}
+		emo = {"happy":1.0 , "surprised":0.7,"sad":0.05,"angry":0.3,"disgust":0.2,"neutral":0.5,"fear":0.8}
 		random.shuffle(top_tracks_uri)
 		for tracks in list(group(top_tracks_uri, 50)):
 			tracks_all_data = sp.audio_features(tracks)
 			for track_data in tracks_all_data:
 				try:
-					if mood=="Sad" :
-						if (0 <= track_data["valence"] <= (emo["Sad"] + 0.15)
-						and track_data["danceability"] <= (emo["Sad"]*8)
-						and track_data["energy"] <= (emo["Sad"]*10)):
+					if mood=="sad" :
+						if (0 <= track_data["valence"] <= (emo["sad"] + 0.15)
+						and track_data["danceability"] <= (emo["sad"]*8)
+						and track_data["energy"] <= (emo["sad"]*10)):
 							selected_tracks_uri.append(track_data["uri"])					
-					elif mood=="Disgust":						
-						if (( emo["Disgust"] - 0.075) <= track_data["valence"] <= ( emo["Disgust"]+ 0.075)
-						and track_data["danceability"] <= (emo["Disgust"]*4)
-						and track_data["energy"] <= (emo["Disgust"]*5)):
+					elif mood=="disgust":						
+						if (( emo["disgust"] - 0.075) <= track_data["valence"] <= ( emo["disgust"]+ 0.075)
+						and track_data["danceability"] <= (emo["disgust"]*4)
+						and track_data["energy"] <= (emo["disgust"]*5)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif mood=="Angry":						
-						if ((emo["Angry"] - 0.075) <= track_data["valence"] <= ( emo["Angry"]+ 0.075)
-						and track_data["danceability"] <= (emo["Angry"]*3)
-						and track_data["energy"] <= (emo["Angry"]*4)):
+					elif mood=="angry":						
+						if ((emo["angry"] - 0.075) <= track_data["valence"] <= ( emo["angry"]+ 0.075)
+						and track_data["danceability"] <= (emo["angry"]*3)
+						and track_data["energy"] <= (emo["angry"]*4)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif mood=="Neutral":						
-						if ((emo["Neutral"] - 0.05) <= track_data["valence"] <= (emo["Neutral"] + 0.05)
-						and track_data["danceability"] <= (emo["Neutral"]*1.75)
-						and track_data["energy"] <= (emo["Neutral"]*1.75)):
+					elif mood=="neutral":						
+						if ((emo["neutral"] - 0.05) <= track_data["valence"] <= (emo["neutral"] + 0.05)
+						and track_data["danceability"] <= (emo["neutral"]*1.75)
+						and track_data["energy"] <= (emo["neutral"]*1.75)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif mood=="Surprised":						
-						if ((emo["Surprised"] - 0.075) <= track_data["valence"] <= (emo["Surprised"] + 0.075)
-						and track_data["danceability"] >= (emo["Surprised"]/2.5)
-						and track_data["energy"] >= (emo["Surprised"]/2)):
+					elif mood=="surprised":						
+						if ((emo["surprised"] - 0.075) <= track_data["valence"] <= (emo["surprised"] + 0.075)
+						and track_data["danceability"] >= (emo["surprised"]/2.5)
+						and track_data["energy"] >= (emo["surprised"]/2)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif mood=="Fear":						
-						if ((emo["Fear"] - 0.075) <= track_data["valence"] <= (emo["Fear"] + 0.075)
-						and track_data["danceability"] >= (emo["Fear"]/2)
-						and track_data["energy"] >= (emo["Fear"]/1.75)):
+					elif mood=="fear":						
+						if ((emo["fear"] - 0.075) <= track_data["valence"] <= (emo["fear"] + 0.075)
+						and track_data["danceability"] >= (emo["fear"]/2)
+						and track_data["energy"] >= (emo["fear"]/1.75)):
 							selected_tracks_uri.append(track_data["uri"])
-					elif mood=="Happy":
-						if ((emo["Happy"] - 0.15) <= track_data["valence"] <= 1
-						and track_data["danceability"] >= (emo["Happy"]/1.75)
-						and track_data["energy"] >= (emo["Happy"]/1.5)):
+					elif mood=="happy":
+						if ((emo["happy"] - 0.15) <= track_data["valence"] <= 1
+						and track_data["danceability"] >= (emo["happy"]/1.75)
+						and track_data["energy"] >= (emo["happy"]/1.5)):
 							selected_tracks_uri.append(track_data["uri"])
 				except TypeError as te:
 					continue

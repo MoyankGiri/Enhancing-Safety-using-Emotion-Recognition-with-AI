@@ -8,9 +8,13 @@ import imutils
 import argparse
 import time
 import dlib
+import os
 import tensorflow as tf
 import pandas as pd
 from fastai.vision import *
+
+parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+working_dir_path = str(parent_dir) + '\\ER_Image'
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--save", dest="save", action="store_true")
@@ -27,8 +31,8 @@ class RealTime_VideoEmotionRecognition:
 
     def __init__(self):
 
-        self.VideoERModel = tf.keras.models.load_model('./FER_ModifiedModel_balanced.h5')
-        self.FaceCascadeClassifier = cv2.CascadeClassifier("./haarcascade_frontalface_default.xml")
+        self.VideoERModel = tf.keras.models.load_model(working_dir_path + "\\FER_ModifiedModel_balanced.h5")
+        self.FaceCascadeClassifier = cv2.CascadeClassifier(working_dir_path + "\\haarcascade_frontalface_default.xml")
         self.predictor = None
         self.prediction = None
         self.predictionProbs = []
@@ -53,7 +57,7 @@ class RealTime_VideoEmotionRecognition:
             time_value = current_time
         return time_value
     
-    def loadFaceDetector(self,faceLandmarksPath = "./shape_predictor_68_face_landmarks.dat", saveOutput = args["save"], savePath = args["savepath"]):
+    def loadFaceDetector(self,faceLandmarksPath = working_dir_path + "\\shape_predictor_68_face_landmarks.dat", saveOutput = args["save"], savePath = args["savepath"]):
 
         self.predictor = dlib.shape_predictor(faceLandmarksPath)
         (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]

@@ -15,8 +15,10 @@ TESS_ORIGINAL_FOLDER_PATH = Path for the TESS dataset original folder (used by t
 """
 import sys
 import pathlib
+import os
 
-working_dir_path = pathlib.Path().absolute()
+parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+working_dir_path = str(parent_dir) + '\\Speech_Emotion_Recognizer'
 
 if sys.platform.startswith('win32'):
     TRAINING_FILES_PATH = str(working_dir_path) + '\\RAVDESS+TESS_Dataset\\'

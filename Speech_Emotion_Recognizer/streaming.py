@@ -29,6 +29,8 @@ class LivePredictions:
         self.file = file
         self.path = MODEL_DIR_PATH + 'Emotion_Voice_Detection_Model.h5'
         self.loaded_model = keras.models.load_model(self.path)
+        self.emotion_array = None
+        self.emotion = None
 
     def make_predictions(self):
         """
@@ -39,9 +41,12 @@ class LivePredictions:
         x = np.expand_dims(mfccs, axis=1)
         x = np.expand_dims(x, axis=0)
         predict = self.loaded_model.predict(x)
-        print(predict) #to get probability for each class
-        #predictions = np.argmax(predict, axis=1)
-        #emotion = self.convert_class_to_emotion(predictions)
+        self.emotion_array = predict #to get probability for each class
+        #print(self.emotion_array)
+        predictions = np.argmax(predict, axis=1)
+        emotion = self.convert_class_to_emotion(predictions)
+        self.emotion = emotion
+        return [predict, emotion]
         #print( "Prediction is", " ", emotion)
         #if emotion=='angry' or emotion=='fearful':
             #playsound(ALERTS_PATH + 'peaceful-ambiance-theme-6350.mp3')
@@ -69,16 +74,20 @@ class LivePredictions:
         return label
 
 
-def findEmotion():
+def findEmotion(obj):
     number_of_times = 1
     time.sleep(3)
+    duration = 5
     #live_prediction.loaded_model.summary() -> to get summary of the model
     for i in range(number_of_times):
-        time.sleep(5)
+        time.sleep(duration)
         AUDIO_FILE = "recording0.wav" #must be present in examples folder and must be .wav
         if stt.convert(EXAMPLES_PATH + AUDIO_FILE) != -1:   
             live_prediction = LivePredictions(file=EXAMPLES_PATH + AUDIO_FILE)
-            live_prediction.make_predictions()
+            arr = live_prediction.make_predictions()
+            obj.emotion_array = arr[0]
+            obj.emotion = arr[1]
+            #print(live_prediction.emotion_array)
 
     #AUDIO_FILE = '03-01-05-02-01-01-10.wav' #must be present in examples folder and must be .wav   
     #live_prediction = LivePredictions(file=EXAMPLES_PATH + AUDIO_FILE)
@@ -107,7 +116,7 @@ def takeAudio():
     
         # This will convert the NumPy array to an audio
         # file with the given sampling frequency
-        wv.write("C:\\Users\\rames\\Desktop\\Emotion-Classification-Ravdess\\examples\\recording0.wav", recording, freq, sampwidth=2)
+        wv.write(EXAMPLES_PATH + "recording0.wav", recording, freq, sampwidth=2)
 
 if __name__ == "__main__":
     t1 = threading.Thread(target=takeAudio)
