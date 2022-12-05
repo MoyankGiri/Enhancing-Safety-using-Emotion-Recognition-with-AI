@@ -5,14 +5,14 @@ class EmotionScoreCalculation:
     def __init__(self):
         self.VideoClassIndices = {0: 'angry', 1: 'disgust', 2: 'fear',
                 3: 'happy', 4: 'neutral', 5: 'sad', 6: 'surprise', None: ''}
-        self.AudioClassIndices = {'0': 'neutral',
-                            '1': 'calm',
-                            '2': 'happy',
-                            '3': 'sad',
-                            '4': 'angry',
-                            '5': 'fearful',
-                            '6': 'disgust',
-                            '7': 'surprised',
+        self.AudioClassIndices = {0: 'neutral',
+                            1: 'calm',
+                            2: 'happy',
+                            3: 'sad',
+                            4: 'angry',
+                            5: 'fearful',
+                            6: 'disgust',
+                            7: 'surprised',
                             None: ''}
         self.VideoERModelAccuracy = 0.9
         self.AudioERModelAccuracy = 0.8

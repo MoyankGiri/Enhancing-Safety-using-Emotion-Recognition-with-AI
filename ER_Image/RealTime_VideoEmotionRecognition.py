@@ -12,6 +12,8 @@ import os
 import tensorflow as tf
 import pandas as pd
 from fastai.vision import *
+from operator import add
+import winsound
 
 parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 working_dir_path = str(parent_dir) + '\\ER_Image'
@@ -42,6 +44,7 @@ class RealTime_VideoEmotionRecognition:
         self.EYE_AR_CONSEC_FRAMES = 10
         self.COUNTER = 0
         self.FRAMES = -1
+        self.runs = 1
     
     def eye_aspect_ratio(self,eye):
         A = dist.euclidean(eye[1], eye[5])
@@ -82,8 +85,14 @@ class RealTime_VideoEmotionRecognition:
             img_cp = gray[Y_1:Y_2, X_1:X_2].copy()
             #prediction, idx, probability = learn.predict(Image(pil2tensor(img_cp, np.float32).div_(225)))
             if self.FRAMES % 100 == 0:
-                self.prediction = np.argmax(self.VideoERModel.predict(np.expand_dims(np.expand_dims(cv2.resize(img_cp, (48, 48)), -1), 0)))
-                self.predictionProbs = list(self.VideoERModel.predict(np.expand_dims(np.expand_dims(cv2.resize(img_cp, (48, 48)), -1), 0)))
+                if len(self.predictionProbs) == 0:
+                    self.prediction = np.argmax(self.VideoERModel.predict(np.expand_dims(np.expand_dims(cv2.resize(img_cp, (48, 48)), -1), 0)))
+                    self.predictionProbs = list(self.VideoERModel.predict(np.expand_dims(np.expand_dims(cv2.resize(img_cp, (48, 48)), -1), 0)))
+                else:
+                    self.prediction = np.argmax(self.VideoERModel.predict(np.expand_dims(np.expand_dims(cv2.resize(img_cp, (48, 48)), -1), 0)))
+                    currPredictions = list(self.VideoERModel.predict(np.expand_dims(np.expand_dims(cv2.resize(img_cp, (48, 48)), -1), 0)))
+                    self.predictionProbs = list(map(add,self.predictionProbs,currPredictions))
+                    self.runs += 1
             cv2.rectangle(
                 img=frame,
                 pt1=(X_1, Y_1),
@@ -94,7 +103,7 @@ class RealTime_VideoEmotionRecognition:
             rect = dlib.rectangle(X, Y, X+w, Y+h)
             if self.FRAMES % 100 == 0:
                 print(self.prediction)
-            cv2.putText(frame, str(self.classIndices[self.prediction]), (
+            cv2.putText(frame, str(self.classIndices[self.prediction]) + " " + str(self.FRAMES), (
                 10, frame.shape[0] - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 128, 0), 2)
             shape = self.predictor(gray, rect)
             shape = face_utils.shape_to_np(shape)
@@ -110,6 +119,7 @@ class RealTime_VideoEmotionRecognition:
             if ear < self.EYE_AR_THRESH:
                 self.COUNTER += 1
                 if self.COUNTER >= self.EYE_AR_CONSEC_FRAMES:
+                    winsound.Beep(2500, 1000)
                     cv2.putText(frame, "Distracted", (10, 30),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
             else:
